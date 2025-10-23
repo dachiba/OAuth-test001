@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-type LoginPageProps = {
-  searchParams: { returnTo?: string };
-};
-
-export default function LoginPage({ searchParams }: LoginPageProps) {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [returnTo, setReturnTo] = useState("/");
-
-  useEffect(() => {
-    setReturnTo(searchParams?.returnTo || "/");
-  }, [searchParams]);
+  const searchParams = useSearchParams();
+  const returnTo = searchParams?.get("returnTo") || "/";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch("/login", {
+    const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -63,5 +57,19 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
         </button>
       </form>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main style={{ padding: "2rem", maxWidth: "420px", margin: "0 auto" }}>
+          <p>Loading...</p>
+        </main>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

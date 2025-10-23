@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "pkce_required" }, { status: 400 });
   }
 
-  const session = getCurrentSession();
+  const session = await getCurrentSession();
   if (!session) {
     const loginUrl = new URL("/login", process.env.SERVER_BASE_URL);
     loginUrl.searchParams.set("returnTo", url.pathname + url.search);
