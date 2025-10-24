@@ -50,7 +50,14 @@ export default function CallbackPage() {
         }).toString(),
       });
       if (!res.ok) {
-        setMsg("Token exchange failed");
+        let errDetail = "";
+        try {
+          const data = await res.json();
+          errDetail = data?.error ? `: ${data.error}` : "";
+        } catch {
+          // ignore json parse errors
+        }
+        setMsg(`Token exchange failed${errDetail}`);
         return;
       }
       const token = await res.json();

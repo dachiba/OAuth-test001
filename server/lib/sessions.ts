@@ -3,7 +3,13 @@ import { randomId } from "./utils";
 
 type Session = { userEmail: string; createdAt: number };
 
-const sessions = new Map<string, Session>(); // sid -> session
+declare global {
+  var __oauthDemoSessions: Map<string, Session> | undefined;
+}
+
+const sessions =
+  globalThis.__oauthDemoSessions ??
+  (globalThis.__oauthDemoSessions = new Map<string, Session>()); // sid -> session
 
 export async function getCurrentSession() {
   const cookieStore = await cookies();

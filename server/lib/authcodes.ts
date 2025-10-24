@@ -10,7 +10,13 @@ type AuthCode = {
   createdAt: number;
 };
 
-const codes = new Map<string, AuthCode>();
+declare global {
+  var __oauthDemoAuthCodes: Map<string, AuthCode> | undefined;
+}
+
+const codes =
+  globalThis.__oauthDemoAuthCodes ??
+  (globalThis.__oauthDemoAuthCodes = new Map<string, AuthCode>());
 
 export function createCode(input: Omit<AuthCode, "code" | "createdAt">) {
   const code = randomId(32);
