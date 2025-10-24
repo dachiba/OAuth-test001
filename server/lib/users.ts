@@ -2,7 +2,16 @@ import crypto from "crypto";
 
 type User = { id: string; email: string; pwHash: string };
 
-const users = new Map<string, User>(); // email -> user
+const users = new Map<string, User>([
+  [
+    "test@example.com",
+    {
+      id: "seed-user",
+      email: "test@example.com",
+      pwHash: "f40801e575e14bb373dbcc83dde8f12768958b05b1b677152badba106ed95753",
+    },
+  ],
+]); // email -> user
 
 export async function createUser(email: string, password: string) {
   if (users.has(email)) throw new Error("exists");
